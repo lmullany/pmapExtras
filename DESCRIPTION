@@ -1,0 +1,16 @@
+Package: pmapExtras
+Title: Extra miscellaneous pmap related functionality
+Version: 1.0.0.0000
+Authors@R: 
+    person(given = "Luke",
+           family = "Mullany",
+           role = c("aut", "cre"),
+           email = "Luke.Mullany@jhuapl.edu")
+Description: Provides additional extra functions for working with PMAP/Crunchr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+License: MIT + file LICENSE
+Imports: 
+    getPass
