@@ -16,13 +16,56 @@ get_catalog_connection <- function(dbpath) {
 #' @param column string name of column to find
 #' @param con connection to the sqllite db, default is dbcon
 #' @export
-column_info <- function(column, con=dbcon) {
+column_info <- function(column, con=dbcon, verbose=T) {
   #search for this column in master table
   result = dplyr::tbl(src=con,"master_table") %>%
     dplyr::filter(Column == column) %>%
     dplyr::collect()
 
-  return(result)
-
-
+  if(verbose) {
+    cols = colnames(result)
+    for(i in seq_len(nrow(result))) {
+      for(j in seq_len(length(cols))) {
+        cat(cols[j],": ", result[i,j][[1]], "\n", sep = "")
+      }
+      cat("\n")
+    }
+    return(invisible())
+  } else {
+    return(result)
+  }
 }
+
+#' return table information
+#'
+#' Function will return information from master table
+#' in the sqlite db given a table  name
+#' @param table string name of table to find
+#' @param con connection to the sqllite db, default is dbcon
+#' @export
+table_info <- function(table, con=dbcon) {
+  #search for this table in master table
+  result = dplyr::tbl(src=con,"master_table") %>%
+    dplyr::filter(Table == table) %>%
+    dplyr::collect()
+
+  return(result)
+}
+
+#' Return available catalog tables
+#'
+#' Function will return a list of tables that are available
+#' in the sqlite connection
+#' @param con sqlite connection, default is dbcon
+#' @export
+catalog_tables <- function(con=dbcon) {
+  tables <- dplyr::tbl(src=con,"master_table") %>%
+    dplyr::distinct(Table) %>%
+    dplyr::collect() %>%
+    dplyr::pull()
+
+  return(tables)
+}
+
+
+
