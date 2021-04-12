@@ -68,6 +68,17 @@ catalog_tables <- function(con=dbcon) {
   return(tables)
 }
 
+#' Global search of data catalog
+#'
+#' Given a keyword, return any rows from the data catalog
+#' tables where the keyword is found
+#' in the sqlite connection
+#' @param keyword string or regular expression to search for
+#' @param ignore_case logical (default=TRUE); set to FALSE to
+#' respect case
+#' @param con sqlite connection, default is dbcon
+#' @export
+
 keyword_search <- function(keyword,ignore_case = TRUE,con=dbcon) {
 
   target = stringr::regex(keyword,ignore_case = ignore_case)
