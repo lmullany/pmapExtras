@@ -3,6 +3,7 @@
 #' Will return a connection to the pmap data catalog
 #' @param dbpath string path to the sql list db
 #' @export
+#' @import data.table
 #'
 get_catalog_connection <- function(dbpath) {
   con <- DBI::dbConnect(RSQLite::SQLite(), dbpath)
@@ -67,5 +68,21 @@ catalog_tables <- function(con=dbcon) {
   return(tables)
 }
 
+keyword_search <- function(keyword,ignore_case = TRUE,con=dbcon) {
+
+  target = stringr::regex(keyword,ignore_case = ignore_case)
+  mtable=data.table::setDT(
+    dplyr::tbl(src=con,"master_table") %>%
+      dplyr::collect()
+  )
+  found_rows = rowSums(mtable[,lapply(.SD, stringr::str_detect,pattern=target)],na.rm=T)>0
+  if(any(found_rows)) {
+    return(mtable[found_rows])
+  } else {
+    cat("Nothing found")
+    return(invisible(NULL))
+  }
+
+}
 
 

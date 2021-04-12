@@ -17,4 +17,5 @@ Imports:
     DBI,
     RSQLite,
     dplyr,
-    magrittr
+    magrittr,
+    data.table
